@@ -178,6 +178,7 @@
       <a href="#p3">Storefront</a>
       <a href="#chosen">Chosen on purpose</a>
       <a href="#decisions">Decisions</a>
+      <a href="#proof">Proof</a>
       <a href="#appendix">Appendix</a>
     </nav>
   </div>
@@ -710,9 +711,66 @@
   </div>
 </section>
 
+<!-- ═══════════════════════ PROOF ═══════════════════════ -->
+<section class="chapter" id="proof">
+  <div class="head"><span class="num">10</span><h2>Proof — third-party checks</h2></div>
+  <p>Independent tools, run against the live sites on October 14. Raw reports live in the
+  <code>proof/</code> folder of this repository; these are the results.</p>
+
+  <h3>Lighthouse 13.5 (Google) — the storefront</h3>
+  <table>
+    <tr><th>Category</th><th>Before</th><th>After</th></tr>
+    <tr><td>Accessibility</td><td>1.00</td><td>1.00</td></tr>
+    <tr><td>Best practices</td><td>0.96</td><td><b>1.00</b></td></tr>
+    <tr><td>SEO</td><td>1.00</td><td>1.00</td></tr>
+    <tr><td>Agentic browsing — how ready the page is for AI agents</td><td>1.00</td><td>1.00</td></tr>
+    <tr><td>Performance</td><td>0.66</td><td>0.59–0.66 across runs</td></tr>
+  </table>
+  <p>The performance number is the honest one: the drag is total blocking time — about 1.1 seconds
+  of main-thread work on load under Lighthouse's throttling, and its own report notes this test
+  machine ran slower than expected. Everything else is a full score. A focused TBT pass is the
+  named next step, not a hidden problem.</p>
+  <figure>
+    <img src="proof/lighthouse-mobile-after.png" alt="The Lighthouse after report: 59 performance, 100 accessibility, 100 best practices, 100 SEO, agentic browsing passing">
+    <figcaption>The after report, opened from <code>proof/lighthouse-mobile-after.html</code> — every
+    category at full score except the TBT-bound performance number.</figcaption>
+  </figure>
+
+  <h3>SSL Labs (Qualys) — TLS, before and after</h3>
+  <div class="pair">
+    <img src="proof/ssl-labs-before.png" alt="SSL Labs before: grade B">
+    <img src="proof/ssl-labs-after.png" alt="SSL Labs after: grade B, HSTS now present in the scan">
+  </div>
+  <p><b>B in both runs — and the cap is not ours:</b> <code>*.workers.dev</code> still offers TLS
+  1.0 and 1.1, which caps the grade on Cloudflare's shared platform. What the fix did change is
+  visible inside the scan: the HSTS header went from <i>absent</i> to <b>present</b>. On a custom
+  domain, that platform cap can be lifted with one setting.</p>
+
+  <h3>Security headers — before → after</h3>
+  <table>
+    <tr><th>Header</th><th>Before</th><th>After</th></tr>
+    <tr><td>Content-Security-Policy (eight inline-script hashes pinned)</td><td>—</td><td>✓</td></tr>
+    <tr><td>Strict-Transport-Security</td><td>—</td><td>max-age=31536000; includeSubDomains</td></tr>
+    <tr><td>X-Content-Type-Options</td><td>—</td><td>nosniff</td></tr>
+    <tr><td>Referrer-Policy</td><td>—</td><td>strict-origin-when-cross-origin</td></tr>
+    <tr><td>Permissions-Policy</td><td>—</td><td>camera, microphone, geolocation, payment, usb: off</td></tr>
+    <tr><td>Cross-Origin-Opener-Policy · X-Frame-Options</td><td>—</td><td>same-origin · DENY</td></tr>
+  </table>
+  <p>Applied to every response from all three sites — the pages via <code>public/_headers</code>,
+  the catalogue route and the backend in their code. Verified in a browser after deploy: no
+  console errors, the islands and the checkout call still work.</p>
+
+  <h3>Re-run them yourself</h3>
+  <ul>
+    <li><b>SSL Labs</b> — <code>ssllabs.com/ssltest</code>, any of the storefront URLs.</li>
+    <li><b>Lighthouse</b> — PageSpeed Insights, or <code>bunx lighthouse &lt;url&gt;</code>.</li>
+    <li><b>Headers</b> — <code>curl -sI &lt;url&gt;</code>, or securityheaders.com in a human browser (it blocks automated scans).</li>
+  </ul>
+</section>
+
 <!-- ═══════════════════════ APPENDIX ═══════════════════════ -->
 <section class="chapter" id="appendix">
-  <div class="head"><span class="num">10</span><h2>Appendix — two code examples</h2></div>
+  <div class="head"><span class="num">11</span><h2>Appendix — two code examples</h2></div>
 
   <h3>A · One refresh at a time — <code>backend/src/tokens.ts</code></h3>
   <pre><code>// Refresh tokens are single-use: every refresh returns a new one and the old
