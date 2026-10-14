@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>وقار — Project record</title>
+<style>
+  /* The same design system as the field guide: wiqar's day room. The record stays in the light. */
+  :root{
+    --room:#edeae3; --room2:#e4e0d6; --paper:#f7f5ef;
+    --ink:#111110; --ink2:#3f3f3c; --ink3:#60605b;
+    --accent:#b08d57; --accent-d:#7a5c30;
+    --deep:#1c1b19; --deep-ink:#f2efe6;
+    --hair:rgba(17,17,16,.14); --hair-strong:rgba(17,17,16,.3);
+    --radius:10px;
+  }
+
+  /* The store's own fonts, bundled with the record for the type showcase. */
+  @font-face{font-family:'Naseeb';font-weight:400 700;font-display:swap;src:url(fonts/naseeb.otf) format('opentype')}
+  @font-face{font-family:'Reem Kufi';font-weight:600;font-display:swap;src:url(fonts/reem-kufi-600-arabic.woff2) format('woff2')}
+  @font-face{font-family:'Amiri';font-weight:400;font-display:swap;src:url(fonts/amiri-400-arabic.woff2) format('woff2')}
+  @font-face{font-family:'IBM Plex Sans Arabic';font-weight:400;font-display:swap;src:url(fonts/plex-arabic-400-arabic.woff2) format('woff2')}
+  @font-face{font-family:'IBM Plex Mono';font-weight:400;font-display:swap;src:url(fonts/plex-mono-400-latin.woff2) format('woff2')}
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--room);color:var(--ink);
+    font:16px/1.75 system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{font-family:Georgia,'Times New Roman',serif;line-height:1.25;margin:0 0 .5rem}
+  h2{font-size:1.65rem;margin-top:0}
+  h3{font-size:1.12rem}
+  p{margin:.55rem 0}
+  a{color:var(--accent-d)}
+  code{font-family:ui-monospace,Consolas,monospace;font-size:.88em;direction:ltr;unicode-bidi:embed;
+    background:var(--room2);border:1px solid var(--hair);border-radius:4px;padding:.06em .4em;white-space:nowrap}
+  pre{background:var(--deep);color:var(--deep-ink);border-radius:var(--radius);padding:14px 16px;
+    overflow-x:auto;font-size:.82rem;line-height:1.6;direction:ltr;text-align:left;margin:14px 0}
+  pre code{background:none;border:none;padding:0;color:inherit;white-space:pre}
+
+  .topbar{position:sticky;top:0;z-index:60;border-bottom:1px solid var(--hair);
+    background:color-mix(in srgb,var(--room) 84%, transparent);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .topbar .wrap{display:flex;align-items:center;gap:14px;padding-top:10px;padding-bottom:10px}
+  .topbar .wq-mini{width:33px;height:25px;flex:none;color:var(--ink)}
+  .topbar nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;font-size:.78rem}
+  .topbar nav::-webkit-scrollbar{display:none}
+  .topbar a{color:var(--ink2);text-decoration:none;border:1px solid var(--hair);border-radius:999px;
+    padding:4px 10px;white-space:nowrap}
+  .topbar a:hover{color:var(--ink);border-color:var(--accent)}
+
+  .hero{padding:56px 0 4px}
+  .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-d);font-weight:700}
+  .hero h1{font-size:clamp(1.8rem,4.2vw,2.7rem);margin-top:10px}
+  .lede{font-size:1.1rem;color:var(--ink2);max-width:66ch}
+  .meta{margin-top:14px;font-size:.85rem;color:var(--ink3)}
+  .meta b{color:var(--ink2)}
+  .rule{width:64px;height:2px;background:var(--accent);margin:24px 0;border-radius:2px}
+
+  .card{background:var(--paper);border:1px solid var(--hair);border-radius:var(--radius);padding:18px 20px;margin:14px 0}
+  .tag{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:700}
+
+  section.chapter{margin:64px 0;scroll-margin-top:84px}
+  section.chapter > .head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+  section.chapter .num{font-family:Georgia,serif;font-size:.95rem;color:var(--accent-d);font-weight:700}
+
+  table{width:100%;border-collapse:collapse;font-size:.9rem;margin:14px 0}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{font-family:Georgia,serif;font-size:.85rem;color:var(--ink2)}
+  tr:last-child td{border-bottom:none}
+  table code{white-space:normal;word-break:break-word}
+
+  /* ── the map ─────────────────────────────────────────────── */
+  .map{width:100%;height:auto;margin:18px 0}
+  .map text{font:13px system-ui,-apple-system,'Segoe UI',sans-serif;fill:var(--ink)}
+  .map .small{font-size:11px;fill:var(--ink3)}
+  .map .map-box{fill:var(--paper);stroke:var(--hair-strong);stroke-width:1}
+  .map .map-dash{fill:none;stroke:var(--accent);stroke-width:1.5;stroke-dasharray:7 6}
+  .map .map-tag{font-size:11px;fill:var(--accent-d);font-weight:700}
+  .map .map-arrow{stroke:var(--accent);stroke-width:1.6;fill:none}
+  .map .map-head{fill:var(--accent)}
+  .map .map-label{font-size:11px;fill:var(--ink3)}
+
+  /* ── checkout steps ──────────────────────────────────────── */
+  .steps{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0}
+  .step{background:var(--paper);border:1px solid var(--hair);border-radius:8px;padding:10px 12px;
+    font-size:.85rem;color:var(--ink2)}
+  .step b{color:var(--accent-d);font-family:Georgia,serif;margin-inline-end:6px}
+  .step-arrow{color:var(--ink3)}
+
+  /* ── timeline ────────────────────────────────────────────── */
+  .timeline{position:relative;margin:20px 0 20px 6px;padding-left:28px;border-left:2px solid var(--hair-strong);list-style:none}
+  .tl{position:relative;margin:0 0 28px;padding:0}
+  .tl::before{content:"";position:absolute;left:-35px;top:7px;width:11px;height:11px;border-radius:50%;
+    background:var(--accent);border:2px solid var(--room)}
+  .tl.muted::before{background:var(--ink3)}
+  .tl .when{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-d);font-weight:700}
+  .tl h3{margin:2px 0 4px;font-size:1.05rem}
+  .tl p{margin:.25rem 0;font-size:.94rem;color:var(--ink2)}
+  .tl .facts{font-size:.8rem;color:var(--ink3)}
+
+  /* ── figures ─────────────────────────────────────────────── */
+  figure{margin:16px 0}
+  figure img,figure video{width:100%;border-radius:var(--radius);border:1px solid var(--hair);display:block}
+  figure video{background:var(--deep)}
+  figcaption{font-size:.8rem;color:var(--ink3);margin-top:6px}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:720px){ .pair{grid-template-columns:1fr} }
+
+  /* ── stats & links ───────────────────────────────────────── */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+  @media (max-width:720px){ .stats{grid-template-columns:1fr 1fr} }
+  .stat{background:var(--paper);border:1px solid var(--hair);border-radius:var(--radius);padding:14px 10px;text-align:center}
+  .stat b{display:block;font-family:Georgia,serif;font-size:1.6rem;color:var(--ink)}
+  .stat span{font-size:.76rem;color:var(--ink3);display:block;margin-top:2px}
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  @media (max-width:720px){ .links{grid-template-columns:1fr} }
+  .link{display:block;text-decoration:none;color:var(--ink);background:var(--paper);
+    border:1px solid var(--hair);border-radius:8px;padding:12px 14px}
+  .link b{display:block}
+  .link span{font-size:.8rem;color:var(--ink3);word-break:break-all}
+  .link:hover{border-color:var(--accent)}
+
+  .note{border-left:4px solid var(--ink3);background:var(--room2);border-radius:0 var(--radius) var(--radius) 0;
+    padding:12px 16px;margin:16px 0}
+  .note.gold{border-left-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--paper))}
+
+  /* ── chosen on purpose ───────────────────────────────────── */
+  .lockup{display:flex;flex-wrap:wrap;align-items:center;gap:26px;background:var(--paper);
+    border:1px solid var(--hair);border-radius:var(--radius);padding:24px;margin:16px 0}
+  .lockup .mark{width:84px;height:84px;flex:none}
+  .lockup .wq-word{width:132px;height:100px;color:var(--ink)}
+  /* Each palette sits in its own lighting, so every color is shown as it is. */
+  .palettes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  @media (max-width:720px){ .palettes{grid-template-columns:1fr} }
+  .palette{border-radius:var(--radius);padding:16px 18px;border:1px solid var(--hair-strong)}
+  .palette.day{background:#edeae3;color:#111110}
+  .palette.night{background:#4c5668;color:#f8f4ea}
+  .palette b{display:block;font-family:Georgia,serif;font-size:.95rem;margin-bottom:10px}
+  .swatches{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .swatch{display:flex;align-items:center;gap:8px;font-size:.78rem}
+  .swatch i{width:22px;height:22px;border-radius:6px;flex:none;background:var(--c);
+    border:1px solid color-mix(in srgb, currentColor 30%, transparent)}
+  .swatch span{font-family:ui-monospace,Consolas,monospace;font-size:.72rem;opacity:.62}
+  .type-row{display:grid;grid-template-columns:140px 1fr;gap:4px 18px;align-items:baseline;
+    padding:12px 0;border-bottom:1px solid var(--hair)}
+  .type-row:last-child{border-bottom:none}
+  .type-name{font-family:Georgia,serif;font-weight:700;font-size:.95rem}
+  .type-sample{font-size:1.45rem;line-height:1.7}
+  .type-why{grid-column:2;font-size:.82rem;color:var(--ink3)}
+
+  footer{margin-top:80px;background:var(--deep);color:var(--deep-ink);padding:40px 0 50px}
+  footer .wrap{color:var(--deep-ink)}
+  footer .wq-word{width:66px;height:50px;color:var(--deep-ink);display:block;margin-bottom:10px}
+  footer p{max-width:60ch;opacity:.85}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="wq-word" viewBox="0 0 131.18 100" fill="currentColor">
+      <path d="M0.00 94.05Q4.36 95.24 7.18 94.94Q10.00 94.65 11.58 93.26Q13.17 91.88 13.76 89.75Q14.36 87.62 14.36 85.14V48.61L28.22 45.54V85.14Q28.22 90.39 25.99 93.71Q23.76 97.02 20.20 98.56Q16.63 100.09 12.72 99.99Q8.81 99.89 5.40 98.36Q1.98 96.83 0.00 94.05ZM37.13 79.20Q37.13 79.20 36.14 79.15Q35.15 79.10 34.16 78.61Q33.17 78.11 33.17 76.93V3.07L47.03 0.00V65.34H54.95V79.20ZM50.99 79.20V65.34H78.71V52.67L92.57 45.54V76.93Q92.57 78.11 91.58 78.61Q90.59 79.10 89.60 79.15Q88.61 79.20 88.61 79.20ZM75.84 62.37Q71.28 62.37 67.42 60.10Q63.56 57.82 61.23 53.96Q58.91 50.10 58.91 45.54Q58.91 40.89 61.23 37.08Q63.56 33.27 67.42 30.99Q71.28 28.71 75.94 28.71Q80.49 28.71 84.25 30.99Q88.01 33.27 90.29 37.08Q92.57 40.89 92.57 45.54Q92.57 50.20 90.29 54.01Q88.01 57.82 84.25 60.10Q80.49 62.37 75.84 62.37ZM75.84 48.51Q77.12 48.51 77.92 47.67Q78.71 46.83 78.71 45.54Q78.71 44.25 77.92 43.41Q77.12 42.57 75.84 42.57Q74.55 42.57 73.66 43.41Q72.77 44.25 72.77 45.54Q72.77 46.83 73.66 47.67Q74.55 48.51 75.84 48.51ZM100.98 92.27Q106.63 93.76 109.94 93.11Q113.26 92.47 114.84 90.69Q116.43 88.91 116.87 87.07Q117.32 85.24 117.32 84.35V66.53L131.18 62.37V81.38Q131.18 87.22 128.71 90.94Q126.23 94.65 122.42 96.38Q118.61 98.11 114.40 98.11Q110.19 98.11 106.58 96.58Q102.96 95.04 100.98 92.27ZM131.18 62.37 114.45 45.54Q115.74 45.54 118.11 45.39Q120.49 45.24 123.11 44.70Q125.74 44.16 127.96 43.02Q130.19 41.88 131.18 40.00ZM114.45 79.20Q109.89 79.20 106.03 76.93Q102.17 74.65 99.85 70.79Q97.52 66.93 97.52 62.37Q97.52 57.72 99.85 53.91Q102.17 50.10 106.03 47.82Q109.89 45.54 114.55 45.54Q119.10 45.54 122.86 47.82Q126.63 50.10 128.90 53.91Q131.18 57.72 131.18 62.37Q131.18 67.03 128.90 70.84Q126.63 74.65 122.86 76.93Q119.10 79.20 114.45 79.20ZM114.45 65.34Q115.74 65.34 116.53 64.50Q117.32 63.66 117.32 62.37Q117.32 61.09 116.53 60.24Q115.74 59.40 114.45 59.40Q113.16 59.40 112.27 60.24Q111.38 61.09 111.38 62.37Q111.38 63.66 112.27 64.50Q113.16 65.34 114.45 65.34Z" />
+      <path d="M84.25 12.9 L90.35 19.8 L84.25 26.7 L78.15 19.8 Z" />
+      <path d="M67.12 12.9 L73.22 19.8 L67.12 26.7 L61.02 19.8 Z" />
+    </symbol>
+  </defs>
+</svg>
+
+<div class="topbar">
+  <div class="wrap">
+    <svg class="wq-mini" viewBox="0 0 131.18 100" role="img" aria-label="وقار"><use href="#wq-word"></use></svg>
+    <nav>
+      <a href="#map">The map</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#p1">Copy system</a>
+      <a href="#p2">Salla store</a>
+      <a href="#p3">Storefront</a>
+      <a href="#chosen">Chosen on purpose</a>
+      <a href="#decisions">Decisions</a>
+      <a href="#appendix">Appendix</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero wrap">
+  <div class="kicker">Project record · September – October 2026</div>
+  <h1>وقار — how a small store was built, and why every choice was made.</h1>
+  <p class="lede">
+    What was built, why, and the proof — in a few minutes. The repositories hold the depth.
+  </p>
+  <ul>
+    <li><b>gcc-store-copy</b> — a free system for writing Arabic product text, facts only.</li>
+    <li><b>The Salla store</b> — the store that sells, with its own design and a one-link preview tool.</li>
+    <li><b>The storefront</b> — the custom website: 46 pages built in advance, the catalogue in D1.</li>
+    <li><b>The backend</b> — the small Worker that holds the keys and connects the site to Salla.</li>
+  </ul>
+  <p class="meta">
+    <b>Author:</b> Mohammed Baqadir &nbsp;·&nbsp;
+    <b>Period:</b> September 16 – October 13, 2026 &nbsp;·&nbsp;
+    <b>Stack:</b> Astro · Svelte 5 · Tailwind/Starwind · Cloudflare Workers · D1 · KV · TypeScript · Bun
+  </p>
+  <div class="rule"></div>
+  <div class="stats">
+    <div class="stat"><b>90</b><span>commits across three repositories</span></div>
+    <div class="stat"><b>4</b><span>weeks, from first commit to live</span></div>
+    <div class="stat"><b>46</b><span>pages, built in advance</span></div>
+    <div class="stat"><b>35</b><span>products in 10 categories</span></div>
+    <div class="stat"><b>2</b><span>live Workers (site + backend)</span></div>
+    <div class="stat"><b>100/100/100</b><span>Lighthouse: accessibility, best practices, SEO</span></div>
+    <div class="stat"><b>10/10</b><span>backend tests, offline, under a second</span></div>
+    <div class="stat"><b>118&nbsp;ms</b><span>time to first byte, measured</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ═══════════════════════ THE MAP ═══════════════════════ -->
+<section class="chapter" id="map">
+  <div class="head"><span class="num">01</span><h2>The map</h2></div>
+  <p>The whole system in one picture — who holds what, and who talks to whom:</p>
+
+  <svg class="map" viewBox="0 0 960 250" role="img"
+    aria-label="The browser talks to the storefront; at checkout the storefront calls the backend, the only place credentials live; the backend builds the cart on Salla; the preview hub opens the Salla store with a fresh signed link.">
+    <rect class="map-box" x="16" y="84" width="150" height="52" rx="9"/>
+    <text x="91" y="115" text-anchor="middle">The browser</text>
+
+    <path class="map-arrow" d="M166 110 H222"/>
+    <path class="map-head" d="M222 104 L233 110 L222 116 Z"/>
+    <text class="map-label" x="199" y="100" text-anchor="middle">pages</text>
+
+    <rect class="map-box" x="238" y="68" width="224" height="84" rx="9"/>
+    <text x="350" y="100" text-anchor="middle">The storefront</text>
+    <text class="small" x="350" y="122" text-anchor="middle">46 built pages · catalogue in D1</text>
+
+    <path class="map-arrow" d="M462 110 H512"/>
+    <path class="map-head" d="M512 104 L523 110 L512 116 Z"/>
+    <text class="map-label" x="492" y="100" text-anchor="middle">cart at checkout</text>
+
+    <rect class="map-dash" x="530" y="42" width="196" height="136" rx="12"/>
+    <text class="map-tag" x="628" y="34" text-anchor="middle">credentials never leave this box</text>
+    <rect class="map-box" x="552" y="76" width="152" height="68" rx="9"/>
+    <text x="628" y="104" text-anchor="middle">The backend</text>
+    <text class="small" x="628" y="124" text-anchor="middle">tokens in KV</text>
+
+    <path class="map-arrow" d="M726 110 H776"/>
+    <path class="map-head" d="M776 104 L787 110 L776 116 Z"/>
+    <text class="map-label" x="756" y="100" text-anchor="middle">cart · items</text>
+
+    <rect class="map-box" x="792" y="60" width="152" height="100" rx="9"/>
+    <text x="868" y="94" text-anchor="middle">Salla</text>
+    <text class="small" x="868" y="114" text-anchor="middle">products · carts · orders</text>
+    <text class="small" x="868" y="130" text-anchor="middle">payments · checkout</text>
+
+    <rect class="map-box" x="238" y="190" width="224" height="44" rx="9"/>
+    <text x="350" y="217" text-anchor="middle">The preview hub</text>
+    <path class="map-arrow" d="M462 212 H868 V168"/>
+    <path class="map-head" d="M862 168 L868 158 L874 168 Z"/>
+    <text class="map-label" x="672" y="202" text-anchor="middle">a fresh signed preview link, any day, one click</text>
+  </svg>
+
+  <p>Two rules keep the picture simple: <b>the website never touches a credential</b> — everything
+  that needs trust happens in the backend — and <b>every purchase finishes on Salla</b>, on its own
+  checkout page.</p>
+</section>
+
+<!-- ═══════════════════════ TIMELINE ═══════════════════════ -->
+<section class="chapter" id="timeline">
+  <div class="head"><span class="num">02</span><h2>Timeline</h2></div>
+  <p>From commit history and file dates across the three repositories — 90 commits in total.</p>
+
+  <ul class="timeline">
+    <li class="tl">
+      <div class="when">Sep 16 – 19</div>
+      <h3>Writing the copy system</h3>
+      <p>Built and published the Arabic copy system: current GCC register, facts only, a check
+      before delivery.</p>
+      <div class="facts">11 commits · MIT · one file (SKILL.md)</div>
+    </li>
+    <li class="tl">
+      <div class="when">Sep 22 – 24</div>
+      <h3>Building the first pages</h3>
+      <p>The first version of the site in Astro: home, categories, the product wall. Design first,
+      selling later.</p>
+      <div class="facts">21 commits</div>
+    </li>
+    <li class="tl">
+      <div class="when">Sep 26 – 27</div>
+      <h3>Starting the backend and the store design</h3>
+      <p>The first backend code connects to Salla; the store's theme, colors, and fonts are written
+      down.</p>
+      <div class="facts">1 backend commit + the design record (DESIGN.md)</div>
+    </li>
+    <li class="tl muted">
+      <div class="when">Sep 27 – Oct 7</div>
+      <h3>A 10-day break, and the plan is decided</h3>
+      <p>No commits. The plan settles: the catalogue in D1, selling on Salla, a small backend in
+      between.</p>
+      <div class="facts">no commits — the decisions that shaped the main build</div>
+    </li>
+    <li class="tl">
+      <div class="when">Oct 8 – 12</div>
+      <h3>The main build</h3>
+      <p>The storefront gains the real catalogue, search, cart, and product pages — then passes a
+      quality check with real numbers. The backend gains tokens, webhook checks, and the Salla cart
+      flow — then a security review.</p>
+      <p>The blue hour is built, and the brand is completed.</p>
+      <div class="facts">49 storefront commits + 8 backend commits · Lighthouse 100/100/100</div>
+    </li>
+    <li class="tl">
+      <div class="when">Oct 12 – 13</div>
+      <h3>Final fixes and documentation</h3>
+      <p>Search fixed and simplified (0.7s → one frame), the brass bug found by measuring, type
+      checks set up in both repositories, and the project written up.</p>
+      <div class="facts">4 commits · both repositories clean and live</div>
+    </li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════ P1 · COPY ═══════════════════════ -->
+<section class="chapter" id="p1">
+  <div class="head"><span class="num">03</span><h2>gcc-store-copy — the copy system</h2></div>
+  <p>
+    The first project is not a website. It is a <b>system for writing Arabic product text</b>,
+    published as a free, open-source file any AI agent can use. Most Arabic e-commerce text reads
+    like a translation — stiff and literal — and GCC shoppers notice before they judge the product.
+  </p>
+  <p>The system has four rules:</p>
+  <ul>
+    <li><b>Write like the market talks.</b> Current GCC Arabic — not formal, not translated.</li>
+    <li><b>Facts only.</b> The writing may use only the facts given in one small JSON record. No invented materials, no fake history.</li>
+    <li><b>Sell, but stay true.</b> A real effort to sell — using only what is true.</li>
+    <li><b>Check before delivery.</b> Every text is checked against the rules before it ships. Customer text stays separate from the operator's note of missing facts.</li>
+  </ul>
+  <p>
+    It came before the store and works for any GCC store: all 35 product descriptions in wiqar
+    follow these rules. A real example (WQ-001, a metal pen):
+  </p>
+  <div class="card" dir="rtl" style="font-family:'Naseeb',Georgia,serif;font-size:1.05rem;line-height:2">
+    ثقل متوازن في اليد، وكتابة هادئة لا تشتّت. جسمه المعدني بملمس مصقول يزداد حضورًا مع الاستعمال —
+    أداة يومية تستحق مكانها في جيبك. اطلبه وخلّه رفيق مكتبك.
+  </div>
+  <p>Direct, specific, current — every claim comes from the product data.</p>
+
+  <figure>
+    <img src="media/COPY-TEXT.gif" alt="A product facts record being written in an editor — the copy system's only allowed material">
+    <figcaption>The copy system's input: one product's facts record — the only material the writing
+    may use — plus its <code>do_not_infer</code> list of claims the copy must never make.</figcaption>
+  </figure>
+
+  <div class="links">
+    <a class="link" href="https://github.com/mohammedbaqadir/gcc-store-copy">
+      <b>gcc-store-copy</b><span>github.com/mohammedbaqadir/gcc-store-copy</span>
+    </a>
+    <div class="link" style="cursor:default;border-style:dashed">
+      <b>Facts</b><span>11 commits · Sep 16–19 · MIT license · works with Claude Code, OpenCode, and other agents</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ P2 · SALLA STORE ═══════════════════════ -->
+<section class="chapter" id="p2">
+  <div class="head"><span class="num">04</span><h2>The Salla store — where selling happens</h2></div>
+  <p>
+    <b>wiqar-store</b> is a Salla store: products, stock, carts, payments, and orders all live
+    there. It has to work on its own, because every purchase finishes on Salla's checkout page.
+  </p>
+
+  <h3>The design</h3>
+  <p>
+    On top of the Salla theme, the store got a full design (recorded in "the Accession Room" design
+    file and shipped as custom CSS): colors from the brand, the Arabic type set, thin lines instead
+    of heavy shadows — brass used only for identity and buttons. Later, the same design moved to the
+    custom website, so both places feel like one store, not two.
+  </p>
+
+  <h3>The preview hub — one permanent link to the store</h3>
+  <div class="note gold">
+    <p>
+      Salla preview links are <b>signed and expire after about an hour</b>, and the dashboard
+      session that creates them expires about every 2 weeks. So opening the store day to day needed
+      a tool, not a bookmark:
+    </p>
+    <p style="margin-top:10px">
+      <a href="https://wiqar-preview.directed-countless.workers.dev/"><b>https://wiqar-preview.directed-countless.workers.dev</b></a>
+    </p>
+  </div>
+  <p>
+    <b>What it does.</b> The page has one button — «افتح المعاينة». Clicking it creates a fresh,
+    signed preview link through Salla's dashboard design API and takes you straight into the store.
+    It keeps the current link saved while it has at least 15 minutes left and creates a new one only
+    when needed — every click is instant, and the link never dies. A <code>/health</code> page
+    answers whether the token still works, and a short guide (<code>TOKEN-REFRESH.md</code>) turns
+    the ~2-week token change into a 2-minute job.
+  </p>
+  <p>
+    <b>The Oct 12 fix.</b> The hub used to ask for the preview with a hardcoded theme version. When
+    the store's theme changed, that old version pointed at a deleted theme and the link landed on a
+    bare page. The fix: the version pin is gone — the hub now asks for the store's current design
+    every time. The saved link's cache key was changed too, so the old broken link was dropped right
+    away.
+  </p>
+
+  <figure>
+    <video controls playsinline preload="metadata" src="media/SALLA-WIQAR-WALK.mp4"></video>
+    <figcaption>The whole path, recorded: the preview link in this document → the hub → «افتح
+    المعاينة» → the store. The walk covers the home campaign, the category grids, and a product page
+    with its quantity selector and add-to-cart. 55 seconds.</figcaption>
+  </figure>
+
+  <div class="links">
+    <a class="link" href="https://wiqar-preview.directed-countless.workers.dev/">
+      <b>Preview hub — the permanent link</b><span>wiqar-preview.directed-countless.workers.dev</span>
+    </a>
+    <a class="link" href="https://salla.sa/wiqar-store">
+      <b>The store on Salla (demo)</b><span>salla.sa/wiqar-store</span>
+    </a>
+  </div>
+
+  <div class="note">
+    <p><b>Two things that took real debugging:</b> Salla identifies a store by its <b>merchant
+    number</b>, never by the username; and a demo store builds carts but cannot finish orders
+    (<code>لا يمكن إتمام الطلب من متجر تجريبي</code>). Both are written down in the
+    repositories.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════ P3 · STOREFRONT ═══════════════════════ -->
+<section class="chapter" id="p3">
+  <div class="head"><span class="num">05</span><h2>The storefront — the website customers see</h2></div>
+  <p>
+    The custom website for the catalogue: <b>46 pages, built in advance</b>, served from
+    Cloudflare's network, live at
+    <a href="https://wiqar-storefront.directed-countless.workers.dev">wiqar-storefront.directed-countless.workers.dev</a>.
+    Salla makes every selling decision; how the site looks, reads, and moves is fully custom.
+  </p>
+
+  <h3>Why build it static</h3>
+  <p>
+    A small store shows almost the same page to every visitor. So every page is built <b>once, in
+    advance</b>, with the product data already inside the HTML — visitors get finished files and
+    nothing is calculated while they wait. The site stays fast and cheap to run, and hard to slow
+    down even with many visitors.
+  </p>
+
+  <h3>Where the data lives — and the SKU that links it</h3>
+  <p>
+    The product data lives in <b>Cloudflare D1</b>: 35 products and 10 categories, kept in
+    <code>migrations/</code>, edited with the <code>bun run sale</code> tool. The site's Worker
+    serves it as <code>/catalog.json</code>, and the build reads and checks it — <b>a bad row fails
+    the build</b>, so the last working version stays online. The selling data stays on Salla. The
+    two sides match products by <b>SKU</b> — the one rule that must not break.
+  </p>
+
+  <h3>The five interactive parts</h3>
+  <p>
+    Only five Svelte components run in the browser: the cart drawer, the cart button, the buy box,
+    the search box, and the hero. Everything else — sorting, filtering, the gallery — is small
+    plain-TypeScript and HTML. The cart lives in the visitor's <code>localStorage</code>: adding is
+    instant and free, and the cart becomes a real Salla cart only at checkout.
+  </p>
+
+  <figure>
+    <div class="pair">
+      <img src="media/wq-001-1-1200.jpg" alt="WQ-001 — a polished metal pen, product photo">
+      <img src="media/wq-025-1-1200.jpg" alt="WQ-025 — a brass coffee pot, product photo">
+    </div>
+    <figcaption>Product photos from the storefront repository — each piece has three views (full,
+    detail, another angle). These are placeholders; real photography replaces them file by
+    file.</figcaption>
+  </figure>
+
+  <h3>Animation — only where it helps</h3>
+  <p>
+    The animations use built-in browser features — no animation libraries. Page changes carry a
+    product photo from the grid into its product page; hovering a link quietly loads the next page;
+    filtering glides the cards to their new spots. Everything respects the "reduce motion" setting.
+    And two animations were <b>deleted after being measured</b>: the search box's opening animation
+    took about 0.7 seconds to look nice, so it now opens in about one frame — with the catalogue
+    preloaded on hover, results are ready before the first keystroke.
+  </p>
+
+  <h3>The numbers</h3>
+  <p>
+    The quality check used real tools, not opinions: Lighthouse <b>100 / 100 / 100</b>
+    (accessibility, best practices, SEO), first byte in <b>118 ms</b>, first paint in <b>388 ms</b>,
+    full load in <b>619 ms</b>, and effectively zero layout shift. Assets are fingerprinted and
+    cached for a long time; photos are cached for a week.
+  </p>
+  <p>
+    <b>One bug, and how it was found.</b> The free-shipping progress bar never appeared — its fill
+    and its track had the <i>same color</i>, because two files both declared a color named
+    <code>--color-accent</code> and the second one silently won. It was found by <b>measuring the
+    real styles in the browser</b>, fixed by deleting one line, and a test now keeps it from
+    returning.
+  </p>
+
+  <figure>
+    <video controls playsinline preload="metadata" src="media/WIQAR-WALK.mp4"></video>
+    <figcaption>The storefront walk — home, search, cart, checkout.</figcaption>
+  </figure>
+
+  <div class="links">
+    <a class="link" href="https://wiqar-storefront.directed-countless.workers.dev">
+      <b>The storefront, live</b><span>wiqar-storefront.directed-countless.workers.dev</span>
+    </a>
+    <a class="link" href="https://github.com/mohammedbaqadir/wiqar-storefront">
+      <b>wiqar-storefront</b><span>github.com/mohammedbaqadir/wiqar-storefront · 70 commits, Sep 22 – Oct 12</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════ P4 · BACKEND ═══════════════════════ -->
+<section class="chapter" id="p4">
+  <div class="head"><span class="num">06</span><h2>The backend — the part that holds the keys</h2></div>
+  <p>
+    The only part of the project that holds Salla's credentials: a small Cloudflare Worker, five
+    routes and one webhook, live at
+    <a href="https://wiqar-backend.directed-countless.workers.dev">wiqar-backend.directed-countless.workers.dev</a>.
+    The website never touches a credential.
+  </p>
+
+  <h3>The API, and why it is small</h3>
+  <p>
+    Reading the catalogue, creating a guest cart, adding an item, a health check, and the Salla
+    webhook. The worker <b>never writes to Salla</b>. The two public read routes are cached, so
+    repeated calls don't burn the store token's rate limit.
+  </p>
+
+  <h3>Where the tokens live</h3>
+  <p>
+    Salla sends the OAuth token pair through a signed webhook. The pair is stored in Cloudflare
+    <b>KV</b> and never leaves the server. Access tokens last about two weeks, and refresh tokens
+    are <b>single-use</b> — each refresh returns a new pair and the old one dies. So the code saves
+    the new pair before using it, never runs two refreshes at once, and treats a refused refresh as
+    "reinstall the app". The most boring part of the project, and the most important: one wrong
+    move here quietly breaks the connection.
+  </p>
+
+  <h3>Webhooks — checking every delivery</h3>
+  <p>
+    Every incoming event is checked with an <b>HMAC-SHA256 signature</b> over the raw request body,
+    compared in constant time. Unsigned or wrong-signature deliveries get a 401. After the security
+    review, the signature is checked <i>before the body is read</i> — so an unknown caller can't
+    make the worker do any work.
+  </p>
+
+  <h3>How checkout works, step by step</h3>
+  <div class="steps">
+    <div class="step"><b>1</b> The cart leaves the browser</div>
+    <span class="step-arrow">→</span>
+    <div class="step"><b>2</b> The backend creates a Salla cart</div>
+    <span class="step-arrow">→</span>
+    <div class="step"><b>3</b> Items added by SKU</div>
+    <span class="step-arrow">→</span>
+    <div class="step"><b>4</b> The shopper pays on Salla</div>
+  </div>
+  <p>
+    The backend does this — not the browser — for two hard reasons: Salla's API doesn't work from
+    browsers, and the credentials must never leave the server.
+  </p>
+
+  <h3>Tests and fixes</h3>
+  <p>
+    <b>10 tests</b> run against a recorded mock of Salla — fully offline, under a second: the
+    catalogue is fetched once, quantities are clamped, the webhook refuses unsigned and changed
+    deliveries, and the cart endpoint builds the right link. The tests were also proven: removing
+    the guard against bad product URLs makes three tests fail. A full security review closed the
+    issues it found — caching for the public reads, reading the webhook body only after the
+    signature check, a quantity clamp, and the URL guard — and confirmed the repository holds no
+    credentials, past or present.
+  </p>
+
+  <div class="links">
+    <a class="link" href="https://wiqar-backend.directed-countless.workers.dev/health">
+      <b>The backend, live (health check)</b><span>wiqar-backend.directed-countless.workers.dev</span>
+    </a>
+    <a class="link" href="https://github.com/mohammedbaqadir/wiqar-backend">
+      <b>wiqar-backend</b><span>github.com/mohammedbaqadir/wiqar-backend · 9 commits, Sep 26 – Oct 12</span>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CHOSEN ON PURPOSE ═══════════════════════ -->
+<section class="chapter" id="chosen">
+  <div class="head"><span class="num">07</span><h2>Chosen on purpose</h2></div>
+  <p>The brand and the stack were not defaults. Every visible choice was made deliberately — and
+  each one has a reason.</p>
+
+  <h3>The logo</h3>
+  <div class="lockup">
+    <svg class="mark" viewBox="0 0 32 32" role="img" aria-label="The mark — a piece on its plinth">
+      <rect width="32" height="32" rx="7" fill="#1c1b19"/>
+      <g fill="#c6a664" transform="translate(0 -0.2)">
+        <path d="M16 5.5 L21.8 13.4 L16 21.3 L10.2 13.4 Z"/>
+        <rect x="9.6" y="25" width="12.8" height="2.1" rx="1.05"/>
+      </g>
+    </svg>
+    <svg class="wq-word" viewBox="0 0 131.18 100" role="img" aria-label="وقار"><use href="#wq-word"></use></svg>
+  </div>
+  <ul>
+    <li><b>A piece on its plinth.</b> The store mounts its objects; the mark is that idea in two shapes — the piece, and the line it stands on.</li>
+    <li><b>The mark lives inside the name.</b> The wordmark is drawn in Reem Kufi letterforms — and the two dots of the letter ق are replaced by the mark's two shapes.</li>
+    <li><b>Arabic only.</b> No Latin twin.</li>
+    <li><b>Drawn, not typed.</b> The wordmark is vector paths: it renders identically everywhere with no font needed — and the favicon comes from the same geometry.</li>
+  </ul>
+
+  <h3>The two lights</h3>
+  <p>One room, two lightings — both mixed by hand. The day is warm greige. The night is the
+  <b>blue hour</b>: a mid-slate evening of the same room, not a dark-mode inversion. The brass is
+  lifted for the darker background, and the one red signal becomes an ember. A store in dark mode
+  must still feel like a store — not an unlit gallery.</p>
+  <div class="palettes">
+    <div class="palette day">
+      <b>Day — the greige room</b>
+      <div class="swatches">
+        <span class="swatch"><i style="--c:#edeae3"></i>room <span>#edeae3</span></span>
+        <span class="swatch"><i style="--c:#f7f5ef"></i>paper <span>#f7f5ef</span></span>
+        <span class="swatch"><i style="--c:#111110"></i>ink <span>#111110</span></span>
+        <span class="swatch"><i style="--c:#b08d57"></i>brass <span>#b08d57</span></span>
+        <span class="swatch"><i style="--c:#1c1b19"></i>deep <span>#1c1b19</span></span>
+        <span class="swatch"><i style="--c:#9c3221"></i>signal <span>#9c3221</span></span>
+      </div>
+    </div>
+    <div class="palette night">
+      <b>Night — the blue hour</b>
+      <div class="swatches">
+        <span class="swatch"><i style="--c:#4c5668"></i>room <span>#4c5668</span></span>
+        <span class="swatch"><i style="--c:#576173"></i>paper <span>#576173</span></span>
+        <span class="swatch"><i style="--c:#f8f4ea"></i>ink <span>#f8f4ea</span></span>
+        <span class="swatch"><i style="--c:#c9a670"></i>brass <span>#c9a670</span></span>
+        <span class="swatch"><i style="--c:#3b4554"></i>deep <span>#3b4554</span></span>
+        <span class="swatch"><i style="--c:#f9bfa6"></i>signal <span>#f9bfa6</span></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>The type</h3>
+  <div class="type-row">
+    <div class="type-name">Naseeb</div>
+    <div class="type-sample" style="font-family:'Naseeb',Georgia,serif" dir="rtl">ثقل متوازن في اليد، وكتابة هادئة لا تشتّت</div>
+    <div class="type-why">The house face — display text and product copy. Contemporary and warm.</div>
+  </div>
+  <div class="type-row">
+    <div class="type-name">Reem Kufi</div>
+    <div class="type-sample" style="font-family:'Reem Kufi',Georgia,serif" dir="rtl">وقار</div>
+    <div class="type-why">The wordmark's base — a geometric Kufi with even strokes, so the outlines stay crisp.</div>
+  </div>
+  <div class="type-row">
+    <div class="type-name">Amiri</div>
+    <div class="type-sample" style="font-family:'Amiri',Georgia,serif" dir="rtl">العناية بالتفاصيل</div>
+    <div class="type-why">The classical note, used sparingly for ceremony.</div>
+  </div>
+  <div class="type-row">
+    <div class="type-name">IBM Plex Arabic · Mono</div>
+    <div class="type-sample" style="font-family:'IBM Plex Sans Arabic',system-ui">المجموع ٨٧٠ ر.س — <span style="font-family:'IBM Plex Mono',monospace;font-size:.85em">WQ-001 · 118 ms</span></div>
+    <div class="type-why">The interface face, and the monospace for figures — prices, SKUs, measurements.</div>
+  </div>
+
+  <h3>The stack</h3>
+  <ul>
+    <li><b>Astro</b> — a store shows almost the same page to every visitor, so pages are built once and served as files: fast and cheap by construction.</li>
+    <li><b>Svelte</b> — added only for the five parts that must react; nothing else ships JavaScript.</li>
+    <li><b>Cloudflare</b> — Workers, D1, and KV: the site, its catalogue, and the API in one place, near the visitor.</li>
+    <li><b>TypeScript + Bun</b> — strict types as a gate in both repositories; one toolchain for run, test, and deploy.</li>
+  </ul>
+
+  <h3>The discipline</h3>
+  <p>Every color is a token in a single file, and the Salla theme and the storefront share the same
+  design system — so the two faces of the store cannot drift apart by accident. The choices stay
+  protected because there is exactly one place they live.</p>
+</section>
+
+<!-- ═══════════════════════ DECISIONS ═══════════════════════ -->
+<section class="chapter" id="decisions">
+  <div class="head"><span class="num">08</span><h2>Decisions</h2></div>
+  <p>The architecture choices, and what each one costs:</p>
+
+  <table>
+    <tr><th>Choice</th><th>Other option</th><th>Why</th><th>What it means</th></tr>
+    <tr><td>Two repositories</td><td>One repository</td><td>The credentials live in exactly one place; the website stays public and safe</td><td>Browsing never needs the backend; buying always does</td></tr>
+    <tr><td>Catalogue in D1, joined by SKU</td><td>Read everything from Salla at build time</td><td>Faster builds, and fields Salla doesn't carry (sales, featured, keywords)</td><td>The SKU is the hard link between the two sides</td></tr>
+    <tr><td>Cart in localStorage</td><td>Server-side carts or accounts</td><td>No accounts by choice; adds are instant and cost nothing</td><td>The cart becomes a Salla cart only at checkout</td></tr>
+    <tr><td>Checkout finishes on Salla</td><td>A custom checkout</td><td>Payment, stock, and orders belong to Salla; no card data comes near this project</td><td>The shopper pays on Salla's page</td></tr>
+    <tr><td>Tokens in KV, written only by the webhook</td><td>Environment variables</td><td>Token changes need no redeploy; one writer</td><td>KV is the most protected asset in the system</td></tr>
+    <tr><td>Checks and tests before "done"</td><td>Ship when it looks right</td><td>The checks caught real bugs; the bad-URL guard is pinned by a test that fails without it</td><td>Every change passes type checks and tests first</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════ CLOSE ═══════════════════════ -->
+<section class="chapter" id="close">
+  <div class="head"><span class="num">09</span><h2>Where it stands</h2></div>
+  <p>
+    <b>Now:</b> a live, fast store website; a real Salla store with the same design; a one-link tool
+    that opens it every day; a backend that holds the only credentials; two public repositories
+    with tests and checks — and no secrets in their history.
+  </p>
+  <p>
+    <b>Next:</b> a real (non-demo) Salla store so orders can complete; real photography to replace
+    the placeholders file by file; and order webhooks — the backend already has a place for them.
+  </p>
+  <div class="links">
+    <a class="link" href="https://wiqar-storefront.directed-countless.workers.dev"><b>Storefront — live</b><span>wiqar-storefront.directed-countless.workers.dev</span></a>
+    <a class="link" href="https://github.com/mohammedbaqadir/wiqar-storefront"><b>wiqar-storefront — source</b><span>github.com/mohammedbaqadir/wiqar-storefront</span></a>
+    <a class="link" href="https://wiqar-backend.directed-countless.workers.dev/health"><b>Backend — live</b><span>wiqar-backend.directed-countless.workers.dev</span></a>
+    <a class="link" href="https://github.com/mohammedbaqadir/wiqar-backend"><b>wiqar-backend — source</b><span>github.com/mohammedbaqadir/wiqar-backend</span></a>
+    <a class="link" href="https://wiqar-preview.directed-countless.workers.dev/"><b>Preview hub — the permanent link to Salla</b><span>wiqar-preview.directed-countless.workers.dev</span></a>
+    <a class="link" href="https://salla.sa/wiqar-store"><b>The store on Salla (demo)</b><span>salla.sa/wiqar-store</span></a>
+    <a class="link" href="https://github.com/mohammedbaqadir/gcc-store-copy"><b>gcc-store-copy — the copy system</b><span>github.com/mohammedbaqadir/gcc-store-copy</span></a>
+  </div>
+</section>
+
+<!-- ═══════════════════════ APPENDIX ═══════════════════════ -->
+<section class="chapter" id="appendix">
+  <div class="head"><span class="num">10</span><h2>Appendix — two code examples</h2></div>
+
+  <h3>A · One refresh at a time — <code>backend/src/tokens.ts</code></h3>
+  <pre><code>// Refresh tokens are single-use: every refresh returns a new one and the old
+// one dies — reusing one revokes every token. So the new pair is always
+// persisted BEFORE the access token is used.
+
+/** One refresh at a time per isolate — parallel refreshes would kill the rotation. */
+let refreshing: Promise&lt;SallaTokens&gt; | null = null;
+
+if (!refreshing) {
+  refreshing = refresh(tokens, context, store).finally(() =&gt; { refreshing = null; });
+}
+return (await refreshing).accessToken;</code></pre>
+
+  <h3>B · Checking the signature — <code>backend/src/webhooks.ts</code></h3>
+  <pre><code>/** HMAC-SHA256(secret, rawBody) as hex, compared in constant time. */
+const mac = new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody)));
+const expected = Array.from(mac, (byte) =&gt; byte.toString(16).padStart(2, '0')).join('');
+return timingSafeEqual(expected, signature.trim().toLowerCase());</code></pre>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <svg class="wq-word" viewBox="0 0 131.18 100" aria-hidden="true"><use href="#wq-word"></use></svg>
+    <span class="tag" style="color:var(--accent)">وقار · Project record</span>
+    <p>A month of work, four projects, one store — September 16 to October 13, 2026.</p>
+  </div>
+</footer>
+
+</body>
+</html>
