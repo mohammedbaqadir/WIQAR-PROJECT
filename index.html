@@ -737,10 +737,14 @@
   </figure>
 
   <h3>SSL Labs (Qualys) — TLS, before and after</h3>
-  <div class="pair">
-    <img src="proof/ssl-labs-before.png" alt="SSL Labs before: grade B">
-    <img src="proof/ssl-labs-after.png" alt="SSL Labs after: grade B, HSTS now present in the scan">
-  </div>
+  <figure>
+    <div class="pair">
+      <img src="proof/ssl-labs-before.png" alt="SSL Labs before: grade B">
+      <img src="proof/ssl-labs-after.png" alt="SSL Labs after: grade B, HSTS now present in the scan">
+    </div>
+    <figcaption>The scan's summary from both runs — same grade (the limits are workers.dev's), with
+    HSTS recorded as present in the after run.</figcaption>
+  </figure>
   <p><b>B in both runs — and the cap is not ours:</b> <code>*.workers.dev</code> still offers TLS
   1.0 and 1.1, which caps the grade on Cloudflare's shared platform. What the fix did change is
   visible inside the scan: the HSTS header went from <i>absent</i> to <b>present</b>. On a custom
