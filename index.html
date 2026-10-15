@@ -263,8 +263,8 @@
     <li class="tl">
       <div class="when">Oct 12 – 13</div>
       <h3>Final fixes and documentation</h3>
-      <p>Search fixed and simplified (0.7s → one frame), the brass bug found by measuring, type
-      checks set up in both repositories, and the project written up.</p>
+      <p>Search fixed and simplified (0.7s → one frame), type checks set up in both repositories,
+      and the project written up.</p>
       <div class="facts">4 commits · both repositories clean and live</div>
     </li>
   </ul>
@@ -473,14 +473,6 @@
     <li>Assets are fingerprinted and cached for a long time; photos for a week.</li>
     <li>The third-party scores live in <a href="#proof">Proof</a>.</li>
   </ul>
-  <p>
-    <b>One bug, and how it was found.</b> The free-shipping progress bar never appeared — its fill
-    and its track had the <i>same color</i>, because two files both declared a color named
-    <code>--color-accent</code> and the second one silently won. It was found by <b>measuring the
-    real styles in the browser</b>, fixed by deleting one line, and a test now keeps it from
-    returning.
-  </p>
-
   <figure>
     <video controls playsinline preload="metadata" src="media/WIQAR-WALK.mp4"></video>
     <figcaption>The storefront walk — home, search, cart, checkout.</figcaption>
