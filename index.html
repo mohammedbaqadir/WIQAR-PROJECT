@@ -171,11 +171,12 @@
   <div class="wrap">
     <svg class="wq-mini" viewBox="0 0 131.18 100" role="img" aria-label="وقار"><use href="#wq-word"></use></svg>
     <nav>
-      <a href="#map">The map</a>
       <a href="#timeline">Timeline</a>
       <a href="#p1">Copy system</a>
       <a href="#p2">Salla store</a>
+      <a href="#map">The map</a>
       <a href="#p3">Storefront</a>
+      <a href="#p4">The engine</a>
       <a href="#chosen">Chosen on purpose</a>
       <a href="#decisions">Decisions</a>
       <a href="#proof">Proof</a>
@@ -208,7 +209,7 @@
     <div class="stat"><b>46</b><span>pages, built in advance</span></div>
     <div class="stat"><b>35</b><span>products in 10 categories</span></div>
     <div class="stat"><b>2</b><span>live Workers (site + backend)</span></div>
-    <div class="stat"><b>100/100/100</b><span>Lighthouse: accessibility, best practices, SEO</span></div>
+    <div class="stat"><b>5</b><span>islands — the site's entire browser JavaScript</span></div>
     <div class="stat"><b>10/10</b><span>backend tests, offline, under a second</span></div>
     <div class="stat"><b>118&nbsp;ms</b><span>time to first byte, measured</span></div>
   </div>
@@ -216,58 +217,9 @@
 
 <main class="wrap">
 
-<!-- ═══════════════════════ THE MAP ═══════════════════════ -->
-<section class="chapter" id="map">
-  <div class="head"><span class="num">01</span><h2>The map</h2></div>
-  <p>The whole system in one picture — who holds what, and who talks to whom:</p>
-
-  <svg class="map" viewBox="0 0 960 250" role="img"
-    aria-label="The browser talks to the storefront; at checkout the storefront calls the backend, the only place credentials live; the backend builds the cart on Salla; the preview hub opens the Salla store with a fresh signed link.">
-    <rect class="map-box" x="16" y="84" width="150" height="52" rx="9"/>
-    <text x="91" y="115" text-anchor="middle">The browser</text>
-
-    <path class="map-arrow" d="M166 110 H222"/>
-    <path class="map-head" d="M222 104 L233 110 L222 116 Z"/>
-    <text class="map-label" x="199" y="100" text-anchor="middle">pages</text>
-
-    <rect class="map-box" x="238" y="68" width="224" height="84" rx="9"/>
-    <text x="350" y="100" text-anchor="middle">The storefront</text>
-    <text class="small" x="350" y="122" text-anchor="middle">46 built pages · catalogue in D1</text>
-
-    <path class="map-arrow" d="M462 110 H512"/>
-    <path class="map-head" d="M512 104 L523 110 L512 116 Z"/>
-    <text class="map-label" x="492" y="100" text-anchor="middle">cart at checkout</text>
-
-    <rect class="map-dash" x="530" y="42" width="196" height="136" rx="12"/>
-    <text class="map-tag" x="628" y="34" text-anchor="middle">credentials never leave this box</text>
-    <rect class="map-box" x="552" y="76" width="152" height="68" rx="9"/>
-    <text x="628" y="104" text-anchor="middle">The backend</text>
-    <text class="small" x="628" y="124" text-anchor="middle">tokens in KV</text>
-
-    <path class="map-arrow" d="M726 110 H776"/>
-    <path class="map-head" d="M776 104 L787 110 L776 116 Z"/>
-    <text class="map-label" x="756" y="100" text-anchor="middle">cart · items</text>
-
-    <rect class="map-box" x="792" y="60" width="152" height="100" rx="9"/>
-    <text x="868" y="94" text-anchor="middle">Salla</text>
-    <text class="small" x="868" y="114" text-anchor="middle">products · carts · orders</text>
-    <text class="small" x="868" y="130" text-anchor="middle">payments · checkout</text>
-
-    <rect class="map-box" x="238" y="190" width="224" height="44" rx="9"/>
-    <text x="350" y="217" text-anchor="middle">The preview hub</text>
-    <path class="map-arrow" d="M462 212 H868 V168"/>
-    <path class="map-head" d="M862 168 L868 158 L874 168 Z"/>
-    <text class="map-label" x="672" y="202" text-anchor="middle">a fresh signed preview link, any day, one click</text>
-  </svg>
-
-  <p>Two rules keep the picture simple: <b>the website never touches a credential</b> — everything
-  that needs trust happens in the backend — and <b>every purchase finishes on Salla</b>, on its own
-  checkout page.</p>
-</section>
-
 <!-- ═══════════════════════ TIMELINE ═══════════════════════ -->
 <section class="chapter" id="timeline">
-  <div class="head"><span class="num">02</span><h2>Timeline</h2></div>
+  <div class="head"><span class="num">01</span><h2>Timeline</h2></div>
   <p>From commit history and file dates across the three repositories — 90 commits in total.</p>
 
   <ul class="timeline">
@@ -306,7 +258,7 @@
       quality check with real numbers. The backend gains tokens, webhook checks, and the Salla cart
       flow — then a security review.</p>
       <p>The blue hour is built, and the brand is completed.</p>
-      <div class="facts">49 storefront commits + 8 backend commits · Lighthouse 100/100/100</div>
+      <div class="facts">49 storefront commits + 8 backend commits</div>
     </li>
     <li class="tl">
       <div class="when">Oct 12 – 13</div>
@@ -320,7 +272,7 @@
 
 <!-- ═══════════════════════ P1 · COPY ═══════════════════════ -->
 <section class="chapter" id="p1">
-  <div class="head"><span class="num">03</span><h2>gcc-store-copy — the copy system</h2></div>
+  <div class="head"><span class="num">02</span><h2>gcc-store-copy — the copy system</h2></div>
   <p>
     The first project is not a website. It is a <b>system for writing Arabic product text</b>,
     published as a free, open-source file any AI agent can use. Most Arabic e-commerce text reads
@@ -361,7 +313,7 @@
 
 <!-- ═══════════════════════ P2 · SALLA STORE ═══════════════════════ -->
 <section class="chapter" id="p2">
-  <div class="head"><span class="num">04</span><h2>The Salla store — where selling happens</h2></div>
+  <div class="head"><span class="num">03</span><h2>The Salla store — where selling happens</h2></div>
   <p>
     <b>wiqar-store</b> is a Salla store: products, stock, carts, payments, and orders all live
     there. It has to work on its own, because every purchase finishes on Salla's checkout page.
@@ -386,21 +338,12 @@
       <a href="https://wiqar-preview.directed-countless.workers.dev/"><b>https://wiqar-preview.directed-countless.workers.dev</b></a>
     </p>
   </div>
-  <p>
-    <b>What it does.</b> The page has one button — «افتح المعاينة». Clicking it creates a fresh,
-    signed preview link through Salla's dashboard design API and takes you straight into the store.
-    It keeps the current link saved while it has at least 15 minutes left and creates a new one only
-    when needed — every click is instant, and the link never dies. A <code>/health</code> page
-    answers whether the token still works, and a short guide (<code>TOKEN-REFRESH.md</code>) turns
-    the ~2-week token change into a 2-minute job.
-  </p>
-  <p>
-    <b>The Oct 12 fix.</b> The hub used to ask for the preview with a hardcoded theme version. When
-    the store's theme changed, that old version pointed at a deleted theme and the link landed on a
-    bare page. The fix: the version pin is gone — the hub now asks for the store's current design
-    every time. The saved link's cache key was changed too, so the old broken link was dropped right
-    away.
-  </p>
+  <ul>
+    <li>One permanent link, where Salla's previews expire within the hour.</li>
+    <li>«افتح المعاينة» mints a fresh signed link and lands you in the store — instant, because the current link is reused until it has only 15 minutes left.</li>
+    <li><code>/health</code> reports whether the token still works; <code>TOKEN-REFRESH.md</code> turns the ~2-week rotation into a 2-minute job.</li>
+    <li><b>Oct 12 fix:</b> the pinned theme version is gone and the cache key changed — a theme change can no longer break the link.</li>
+  </ul>
 
   <figure>
     <video controls playsinline preload="metadata" src="media/SALLA-WIQAR-WALK.mp4"></video>
@@ -426,15 +369,69 @@
   </div>
 </section>
 
+<!-- ═══════════════════════ THE MAP ═══════════════════════ -->
+<section class="chapter" id="map">
+  <div class="head"><span class="num">04</span><h2>The map</h2></div>
+  <p>The shape of the build — who holds what, and who talks to whom:</p>
+
+  <svg class="map" viewBox="0 0 960 250" role="img"
+    aria-label="The browser talks to the storefront; at checkout the storefront calls the backend, the only place credentials live; the backend builds the cart on Salla; the preview hub opens the Salla store with a fresh signed link.">
+    <rect class="map-box" x="16" y="84" width="150" height="52" rx="9"/>
+    <text x="91" y="115" text-anchor="middle">The browser</text>
+
+    <path class="map-arrow" d="M166 110 H222"/>
+    <path class="map-head" d="M222 104 L233 110 L222 116 Z"/>
+    <text class="map-label" x="199" y="100" text-anchor="middle">pages</text>
+
+    <rect class="map-box" x="238" y="68" width="224" height="84" rx="9"/>
+    <text x="350" y="100" text-anchor="middle">The storefront</text>
+    <text class="small" x="350" y="122" text-anchor="middle">46 built pages · catalogue in D1</text>
+
+    <path class="map-arrow" d="M462 110 H512"/>
+    <path class="map-head" d="M512 104 L523 110 L512 116 Z"/>
+    <text class="map-label" x="492" y="100" text-anchor="middle">cart at checkout</text>
+
+    <rect class="map-dash" x="530" y="42" width="196" height="136" rx="12"/>
+    <text class="map-tag" x="628" y="34" text-anchor="middle">credentials never leave this box</text>
+    <rect class="map-box" x="552" y="76" width="152" height="68" rx="9"/>
+    <text x="628" y="104" text-anchor="middle">The backend</text>
+    <text class="small" x="628" y="124" text-anchor="middle">tokens in KV</text>
+
+    <path class="map-arrow" d="M726 110 H776"/>
+    <path class="map-head" d="M776 104 L787 110 L776 116 Z"/>
+    <text class="map-label" x="756" y="100" text-anchor="middle">cart · items</text>
+
+    <rect class="map-box" x="792" y="60" width="152" height="100" rx="9"/>
+    <text x="868" y="94" text-anchor="middle">Salla</text>
+    <text class="small" x="868" y="114" text-anchor="middle">products · carts · orders</text>
+    <text class="small" x="868" y="130" text-anchor="middle">payments · checkout</text>
+
+    <rect class="map-box" x="238" y="190" width="224" height="44" rx="9"/>
+    <text x="350" y="217" text-anchor="middle">The preview hub</text>
+    <path class="map-arrow" d="M462 212 H868 V168"/>
+    <path class="map-head" d="M862 168 L868 158 L874 168 Z"/>
+    <text class="map-label" x="672" y="202" text-anchor="middle">a fresh signed preview link, any day, one click</text>
+  </svg>
+
+  <p>Two rules keep it simple: <b>the website never touches a credential</b> — everything trusted
+  happens in the backend — and <b>every purchase finishes on Salla</b>.</p>
+</section>
+
 <!-- ═══════════════════════ P3 · STOREFRONT ═══════════════════════ -->
 <section class="chapter" id="p3">
   <div class="head"><span class="num">05</span><h2>The storefront — the website customers see</h2></div>
   <p>
-    The custom website for the catalogue: <b>46 pages, built in advance</b>, served from
-    Cloudflare's network, live at
-    <a href="https://wiqar-storefront.directed-countless.workers.dev">wiqar-storefront.directed-countless.workers.dev</a>.
-    Salla makes every selling decision; how the site looks, reads, and moves is fully custom.
+    <b>Why it exists:</b> a Salla theme can't produce this design — and more important, this route
+    gave complete freedom in customization and in the choice of front-end tech. The site is
+    <a href="https://wiqar-storefront.directed-countless.workers.dev">wiqar-storefront.directed-countless.workers.dev</a>;
+    everything that sells stays on Salla.
   </p>
+  <ul>
+    <li><b>46 pages, built in advance</b> — finished files, nothing computed while a visitor waits.</li>
+    <li><b>Served from Cloudflare's network</b> — near the visitor, cached at the edge.</li>
+    <li><b>Five interactive parts</b> — the site's entire browser JavaScript.</li>
+    <li><b>Every purchase finishes on Salla</b> — on its own checkout page.</li>
+  </ul>
 
   <h3>Why build it static</h3>
   <p>
@@ -442,15 +439,6 @@
     advance</b>, with the product data already inside the HTML — visitors get finished files and
     nothing is calculated while they wait. The site stays fast and cheap to run, and hard to slow
     down even with many visitors.
-  </p>
-
-  <h3>Where the data lives — and the SKU that links it</h3>
-  <p>
-    The product data lives in <b>Cloudflare D1</b>: 35 products and 10 categories, kept in
-    <code>migrations/</code>, edited with the <code>bun run sale</code> tool. The site's Worker
-    serves it as <code>/catalog.json</code>, and the build reads and checks it — <b>a bad row fails
-    the build</b>, so the last working version stays online. The selling data stays on Salla. The
-    two sides match products by <b>SKU</b> — the one rule that must not break.
   </p>
 
   <h3>The five interactive parts</h3>
@@ -472,22 +460,19 @@
   </figure>
 
   <h3>Animation — only where it helps</h3>
-  <p>
-    The animations use built-in browser features — no animation libraries. Page changes carry a
-    product photo from the grid into its product page; hovering a link quietly loads the next page;
-    filtering glides the cards to their new spots. Everything respects the "reduce motion" setting.
-    And two animations were <b>deleted after being measured</b>: the search box's opening animation
-    took about 0.7 seconds to look nice, so it now opens in about one frame — with the catalogue
-    preloaded on hover, results are ready before the first keystroke.
-  </p>
+  <ul>
+    <li>Browser-native only — no animation libraries.</li>
+    <li>A product photo morphs from grid into its product page; links prefetch on hover; filters glide.</li>
+    <li>All of it listens to the "reduce motion" setting.</li>
+    <li>Two animations were <b>deleted after measuring</b> — the search open took 0.7s to look nice, so it now opens in about one frame, with the catalogue preloaded.</li>
+  </ul>
 
-  <h3>The numbers</h3>
-  <p>
-    The quality check used real tools, not opinions: Lighthouse <b>100 / 100 / 100</b>
-    (accessibility, best practices, SEO), first byte in <b>118 ms</b>, first paint in <b>388 ms</b>,
-    full load in <b>619 ms</b>, and effectively zero layout shift. Assets are fingerprinted and
-    cached for a long time; photos are cached for a week.
-  </p>
+  <h3>Measured</h3>
+  <ul>
+    <li>First byte <b>118 ms</b> · first paint <b>388 ms</b> · full load <b>619 ms</b> · layout shift effectively zero.</li>
+    <li>Assets are fingerprinted and cached for a long time; photos for a week.</li>
+    <li>The third-party scores live in <a href="#proof">Proof</a>.</li>
+  </ul>
   <p>
     <b>One bug, and how it was found.</b> The free-shipping progress bar never appeared — its fill
     and its track had the <i>same color</i>, because two files both declared a color named
@@ -513,40 +498,59 @@
 
 <!-- ═══════════════════════ P4 · BACKEND ═══════════════════════ -->
 <section class="chapter" id="p4">
-  <div class="head"><span class="num">06</span><h2>The backend — the part that holds the keys</h2></div>
+  <div class="head"><span class="num">06</span><h2>The engine — the catalogue and the keys</h2></div>
   <p>
-    The only part of the project that holds Salla's credentials: a small Cloudflare Worker, five
-    routes and one webhook, live at
-    <a href="https://wiqar-backend.directed-countless.workers.dev">wiqar-backend.directed-countless.workers.dev</a>.
-    The website never touches a credential.
+    Two pieces make buying work: the catalogue's home — a Cloudflare database — and a small Worker,
+    the only part of the system that holds Salla's credentials. The website itself never touches
+    one.
   </p>
 
-  <h3>The API, and why it is small</h3>
-  <p>
-    Reading the catalogue, creating a guest cart, adding an item, a health check, and the Salla
-    webhook. The worker <b>never writes to Salla</b>. The two public read routes are cached, so
-    repeated calls don't burn the store token's rate limit.
-  </p>
+  <h3>The catalogue — Cloudflare D1</h3>
+  <ul>
+    <li><b>What:</b> Cloudflare D1 — a SQLite database on Cloudflare's network; the catalogue's home: 35 products, 10 categories.</li>
+    <li><b>Why there:</b> it carries what Salla doesn't — sale windows, featured flags, search keywords — and the build reads it once.</li>
+    <li><b>How:</b> <code>migrations/</code> is the schema; <code>bun run sale</code> edits sale windows and pings a rebuild; the site's Worker serves it as <code>/catalog.json</code>.</li>
+    <li><b>The rule:</b> the build validates it — <b>a bad row fails the build</b>, so the last working site stays live.</li>
+    <li><b>The link:</b> the two sides match products by <b>SKU</b>.</li>
+  </ul>
 
-  <h3>Where the tokens live</h3>
-  <p>
-    Salla sends the OAuth token pair through a signed webhook. The pair is stored in Cloudflare
-    <b>KV</b> and never leaves the server. Access tokens last about two weeks, and refresh tokens
-    are <b>single-use</b> — each refresh returns a new pair and the old one dies. So the code saves
-    the new pair before using it, never runs two refreshes at once, and treats a refused refresh as
-    "reinstall the app". The most boring part of the project, and the most important: one wrong
-    move here quietly breaks the connection.
-  </p>
+  <svg class="map" viewBox="0 0 960 196" role="img"
+    aria-label="The catalogue lives in D1; the site's Worker serves it as /catalog.json; the build produces 46 validated pages; the catalogue and Salla are matched by SKU.">
+    <rect class="map-box" x="16" y="16" width="240" height="64" rx="9"/>
+    <text x="136" y="44" text-anchor="middle">D1 — the catalogue</text>
+    <text class="small" x="136" y="64" text-anchor="middle">35 products · 10 categories</text>
 
-  <h3>Webhooks — checking every delivery</h3>
-  <p>
-    Every incoming event is checked with an <b>HMAC-SHA256 signature</b> over the raw request body,
-    compared in constant time. Unsigned or wrong-signature deliveries get a 401. After the security
-    review, the signature is checked <i>before the body is read</i> — so an unknown caller can't
-    make the worker do any work.
-  </p>
+    <path class="map-arrow" d="M256 48 H308"/>
+    <path class="map-head" d="M308 42 L319 48 L308 54 Z"/>
 
-  <h3>How checkout works, step by step</h3>
+    <rect class="map-box" x="316" y="16" width="280" height="64" rx="9"/>
+    <text x="456" y="44" text-anchor="middle">/catalog.json</text>
+    <text class="small" x="456" y="64" text-anchor="middle">served by the site's Worker</text>
+
+    <path class="map-arrow" d="M596 48 H648"/>
+    <path class="map-head" d="M648 42 L659 48 L648 54 Z"/>
+
+    <rect class="map-box" x="656" y="16" width="288" height="64" rx="9"/>
+    <text x="800" y="44" text-anchor="middle">The build</text>
+    <text class="small" x="800" y="64" text-anchor="middle">46 pages · a bad row fails the build</text>
+
+    <path class="map-dash" d="M136 80 V124"/>
+    <path class="map-head" d="M130 124 L136 134 L142 124 Z"/>
+    <text class="map-label" x="150" y="108">matched by SKU</text>
+
+    <rect class="map-box" x="16" y="134" width="928" height="46" rx="9"/>
+    <text x="480" y="162" text-anchor="middle">Salla — the selling side: products · carts · orders · payments · checkout</text>
+  </svg>
+
+  <h3>The backend — five routes and the keys</h3>
+  <ul>
+    <li>A small Cloudflare Worker, live at <a href="https://wiqar-backend.directed-countless.workers.dev">wiqar-backend.directed-countless.workers.dev</a>: it reads the catalogue, creates guest carts, adds items, answers a health check, and takes the Salla webhook. It <b>never writes to Salla</b>.</li>
+    <li><b>Tokens:</b> Salla's token pair lives in Cloudflare <b>KV</b> and never leaves the server. Refreshes are <b>single-use and rotate</b> — each refresh kills the old pair — so the code saves the new pair before using it and never runs two refreshes at once. The boring part, and the part where one wrong move quietly kills the connection.</li>
+    <li><b>The webhook</b> verifies Salla's signature (standard practice) and is the only writer of tokens.</li>
+    <li><b>The public reads are cached</b>, so repeated calls don't burn the store token's rate limit.</li>
+  </ul>
+
+  <h3>Checkout, step by step</h3>
   <div class="steps">
     <div class="step"><b>1</b> The cart leaves the browser</div>
     <span class="step-arrow">→</span>
@@ -561,15 +565,12 @@
     browsers, and the credentials must never leave the server.
   </p>
 
-  <h3>Tests and fixes</h3>
+  <h3>Tests and the review</h3>
   <p>
-    <b>10 tests</b> run against a recorded mock of Salla — fully offline, under a second: the
-    catalogue is fetched once, quantities are clamped, the webhook refuses unsigned and changed
-    deliveries, and the cart endpoint builds the right link. The tests were also proven: removing
-    the guard against bad product URLs makes three tests fail. A full security review closed the
-    issues it found — caching for the public reads, reading the webhook body only after the
-    signature check, a quantity clamp, and the URL guard — and confirmed the repository holds no
-    credentials, past or present.
+    <b>10 tests</b> against a recorded mock of Salla — offline, under a second — and they were
+    proven: removing the bad-URL guard makes three of them fail. The security review closed what it
+    found (caching on the public reads, the body-order check, a quantity clamp, the URL guard) and
+    confirmed the repository holds no credentials, past or present.
   </p>
 
   <div class="links">
@@ -736,9 +737,9 @@
 
 <!-- ═══════════════════════ APPENDIX ═══════════════════════ -->
 <section class="chapter" id="appendix">
-  <div class="head"><span class="num">11</span><h2>Appendix — two code examples</h2></div>
+  <div class="head"><span class="num">11</span><h2>Appendix — one code example</h2></div>
 
-  <h3>A · One refresh at a time — <code>backend/src/tokens.ts</code></h3>
+  <h3>One refresh at a time — <code>backend/src/tokens.ts</code></h3>
   <pre><code>// Refresh tokens are single-use: every refresh returns a new one and the old
 // one dies — reusing one revokes every token. So the new pair is always
 // persisted BEFORE the access token is used.
@@ -750,12 +751,6 @@ if (!refreshing) {
   refreshing = refresh(tokens, context, store).finally(() =&gt; { refreshing = null; });
 }
 return (await refreshing).accessToken;</code></pre>
-
-  <h3>B · Checking the signature — <code>backend/src/webhooks.ts</code></h3>
-  <pre><code>/** HMAC-SHA256(secret, rawBody) as hex, compared in constant time. */
-const mac = new Uint8Array(await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody)));
-const expected = Array.from(mac, (byte) =&gt; byte.toString(16).padStart(2, '0')).join('');
-return timingSafeEqual(expected, signature.trim().toLowerCase());</code></pre>
 </section>
 
 </main>
