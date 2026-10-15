@@ -34,9 +34,6 @@
   a{color:var(--accent-d)}
   code{font-family:ui-monospace,Consolas,monospace;font-size:.88em;direction:ltr;unicode-bidi:embed;
     background:var(--room2);border:1px solid var(--hair);border-radius:4px;padding:.06em .4em;white-space:nowrap}
-  pre{background:var(--deep);color:var(--deep-ink);border-radius:var(--radius);padding:14px 16px;
-    overflow-x:auto;font-size:.82rem;line-height:1.6;direction:ltr;text-align:left;margin:14px 0}
-  pre code{background:none;border:none;padding:0;color:inherit;white-space:pre}
 
   .topbar{position:sticky;top:0;z-index:60;border-bottom:1px solid var(--hair);
     background:color-mix(in srgb,var(--room) 84%, transparent);
@@ -180,7 +177,6 @@
       <a href="#chosen">Chosen on purpose</a>
       <a href="#decisions">Decisions</a>
       <a href="#proof">Proof</a>
-      <a href="#appendix">Appendix</a>
     </nav>
   </div>
 </div>
@@ -725,24 +721,6 @@
   </figure>
   <p><b>A+ — 125/100, all 12 tests passed.</b> The security headers the store now sends are what
   this grade measures.</p>
-</section>
-
-<!-- ═══════════════════════ APPENDIX ═══════════════════════ -->
-<section class="chapter" id="appendix">
-  <div class="head"><span class="num">11</span><h2>Appendix — one code example</h2></div>
-
-  <h3>One refresh at a time — <code>backend/src/tokens.ts</code></h3>
-  <pre><code>// Refresh tokens are single-use: every refresh returns a new one and the old
-// one dies — reusing one revokes every token. So the new pair is always
-// persisted BEFORE the access token is used.
-
-/** One refresh at a time per isolate — parallel refreshes would kill the rotation. */
-let refreshing: Promise&lt;SallaTokens&gt; | null = null;
-
-if (!refreshing) {
-  refreshing = refresh(tokens, context, store).finally(() =&gt; { refreshing = null; });
-}
-return (await refreshing).accessToken;</code></pre>
 </section>
 
 </main>
